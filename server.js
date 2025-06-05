@@ -1,29 +1,38 @@
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
+const passport = require("passport");
+const jwt = require("jsonwebtoken");
+const User = require("./Models/UserModel"); // שים לב שמדובר ב-UserModel שלך
+const bodyParser = require("body-parser");
+const cors = require("cors");
+require("dotenv").config();
+
+// Middleware
+app.use(bodyParser.json());
+app.use(cors());
+app.use(passport.initialize());
+
+// MongoDB connection
+const mongoConnection = process.env.MONGO_URI;
+console.log("MongoDB URI:", mongoConnection);
+
+mongoose
+  .connect(mongoConnection)
+  .then(() => console.log("Connected to MongoDB"))
+  .catch((err) => console.error("MongoDB connection error:", err));
+
+// Your existing routes for tasks, users, etc.
 const TaskRouter = require("./Routers/TaskRouter");
 const UserRouter = require("./Routers/UserRouter");
-const bodyParser = require("body-parser");
-const cors = require("cors"); // הוסף את השורה הזו
-
-require('dotenv').config();
-
-// Middleware to parse JSON bodies
-app.use(bodyParser.json());
-app.use(cors()); // הוסף את ה-Middleware הזה
-
-// MongoDB connection string מה .env
-const mongoConnection = process.env.MONGO_URI;
-
-console.log('MongoDB URI:', mongoConnection);
-
-mongoose.connect(mongoConnection, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log('Connected to MongoDB'))
-  .catch(err => console.error('MongoDB connection error:', err));
-
-// שימוש בראוטרים
 app.use("/tasks", TaskRouter);
 app.use("/users", UserRouter);
+
+// const { checkAndSendEmails } = require('./services/taskChecker');
+// setInterval(() => {
+//   checkAndSendEmails();
+// }, 60000); // כל דקה
+
 
 const PORT = process.env.APP_PORT || 8080;
 app.listen(PORT, () => {
