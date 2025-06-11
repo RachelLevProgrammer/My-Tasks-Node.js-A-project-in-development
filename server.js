@@ -3,7 +3,7 @@ const app = express();
 const mongoose = require("mongoose");
 const passport = require("passport");
 const jwt = require("jsonwebtoken");
-const User = require("./Models/UserModel"); // שים לב שמדובר ב-UserModel שלך
+const User = require("./Models/UserModel"); 
 const bodyParser = require("body-parser");
 const cors = require("cors");
 require("dotenv").config();
@@ -28,13 +28,9 @@ const UserRouter = require("./Routers/UserRouter");
 app.use("/tasks", TaskRouter);
 app.use("/users", UserRouter);
 
-// const { checkAndSendEmails } = require('./services/taskChecker');
-// setInterval(() => {
-//   checkAndSendEmails();
-// }, 60000); // כל דקה
-
-
 const PORT = process.env.APP_PORT || 8080;
 app.listen(PORT, () => {
   console.log("Server running on port", PORT);
 });
+
+

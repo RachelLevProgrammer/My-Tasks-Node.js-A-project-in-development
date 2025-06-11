@@ -21,7 +21,6 @@ const createTask = async (req, res) => {
       startTime,
       emoji,
       time
-    //   userId: user._id, // שים לב לשם החדש
     });
 
     const savedTask = await task.save();
@@ -29,7 +28,6 @@ const createTask = async (req, res) => {
     user.calendar.push(savedTask);
     await user.save();
 
-    // const updatedTasks = await Task.find({ userId: user._id });
 
     res.status(201).json({ message: "Task created", newTask: savedTask });
   } catch (err) {
@@ -70,21 +68,42 @@ const deleteTask = async (req, res) => {
 
 
 const updatedTask = async (req, res) => {
+  const { id } = req.params;
+
+  const {
+    userEmail, name, date, startTime, endTime,
+    issueTask, typeTask, wayOfActing, time, emoji
+  } = req.body;
+
   try {
-    const updatedTask = await Task.findOneAndUpdate(
-      { _id: req.params.id, userId: req.user.userId },
-      req.body,
-      { new: true }
+    const task = await Task.findByIdAndUpdate(
+      id,
+      {
+        userEmail,
+        name,
+        date,
+        startTime,
+        endTime,
+        issueTask,
+        typeTask,
+        wayOfActing,
+        time,
+        emoji,
+      },
+      { new: true, runValidators: true } // חשוב! מחזיר את הגרסה החדשה ומפעיל ולידציה
     );
-    if (!updatedTask) return res.status(404).json({ message: 'Task not found or unauthorized' });
-    res.json(updatedTask);
+
+    if (!task) {
+      return res.status(404).json({ message: "Task not found" });
+    }
+
+    res.status(200).json({ message: "Task updated", newTask: task });
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
 };
 
 
-// בתוך קובץ הבקר שלך, לדוג' controllers/taskController.js
 const getTasksByEmail = async (req, res) => {
   const { userEmail } = req.body;
 
