@@ -33,4 +33,7 @@ app.listen(PORT, () => {
   console.log("Server running on port", PORT);
 });
 
+// const { sendTaskEmail } = require('./services/emailService');
+
+// sendTaskEmail('rl56748072@gmail.com', 'בדיקת שליחה', 'בודק אם המייל נשלח תקין');
 
