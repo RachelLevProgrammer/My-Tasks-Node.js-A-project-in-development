@@ -1,18 +1,15 @@
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 
 const verifyJWT = (req, res, next) => {
-  debugger
-  const authHeader = req.headers.authorization || req.headers.Authorization;
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1]; // Bearer token
 
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return res.status(401).json({ message: "Unauthorized" });
-  }
-
-  const token = authHeader.split(" ")[1];
+  if (!token) return res.status(401).json({ message: "Unauthorized" });
 
   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
     if (err) return res.status(403).json({ message: "Forbidden" });
-    req.user = decoded; // decoded כולל userId, email
+
+    req.user = decoded; // decoded כולל { userId, email }
     next();
   });
 };

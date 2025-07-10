@@ -1,7 +1,7 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const TaskSchema = new mongoose.Schema({
-//   userId: { type: mongoose.Schema.Types.ObjectId, ref: 'Users', required: true },
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: "Users", required: true },
   name: { type: String, required: true, minlength: 2, trim: true },
   date: { type: Date, required: true },
   startTime: {
@@ -17,6 +17,8 @@ const TaskSchema = new mongoose.Schema({
   issueTask: { type: String, required: true, minlength: 5, trim: true },
   typeTask: { type: String },
   wayOfActing: { type: String, required: true },
+  time: { type: String },
+  emoji: { type: String },
 });
 
 module.exports = mongoose.model("Tasks", TaskSchema);

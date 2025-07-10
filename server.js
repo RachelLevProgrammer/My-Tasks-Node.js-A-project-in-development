@@ -1,30 +1,30 @@
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
-const passport = require("passport");
-const jwt = require("jsonwebtoken");
-const User = require("./Models/UserModel"); 
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
 require("dotenv").config();
 
-// Middleware
+// Middlewares
 app.use(bodyParser.json());
-app.use(cors());
-app.use(passport.initialize());
+app.use(cookieParser());
+app.use(cors({
+  origin: "http://localhost:3000", // החלף לכתובת של הפרונטנד שלך
+  credentials: true, // חשוב להעביר קוקיס
+}));
 
-// MongoDB connection
-const mongoConnection = process.env.MONGO_URI;
-console.log("MongoDB URI:", mongoConnection);
-
+// DB Connection
 mongoose
-  .connect(mongoConnection)
+  .connect(process.env.MONGO_URI)
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => console.error("MongoDB connection error:", err));
 
-// Your existing routes for tasks, users, etc.
+// Routes
 const TaskRouter = require("./Routers/TaskRouter");
 const UserRouter = require("./Routers/UserRouter");
+
+
 app.use("/tasks", TaskRouter);
 app.use("/users", UserRouter);
 
@@ -32,5 +32,3 @@ const PORT = process.env.APP_PORT || 8080;
 app.listen(PORT, () => {
   console.log("Server running on port", PORT);
 });
-
-

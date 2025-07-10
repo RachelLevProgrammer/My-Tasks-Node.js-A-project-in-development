@@ -1,14 +1,14 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const verifyJWT = require('../Middleware/VerifyJWT');
-const taskController = require('../Controllers/TaskController');
+const verifyJWT = require("../Middleware/VerifyJWT");
+const taskController = require("../Controllers/TaskController");
 
-router.use(verifyJWT); // כל הראוטים מחייבים JWT
+router.use(verifyJWT);
 
-router.post('/createTask', taskController.createTask);
-// router.get('/', taskController.getTask);
-router.get('/getTasksByEmail', taskController.getTasksByEmail);
-router.put('/updateTask/:id', taskController.updatedTask);
-router.delete('/deleteTask/:id', taskController.deleteTask);
+router.post("/createTask", taskController.createTask);
+router.get("/getTasks", taskController.getTasks);
+router.put("/updateTask/:id", taskController.updatedTask);
+router.delete("/deleteTask/:id", taskController.deleteTask);
+router.get("/getTask/:id", taskController.getTaskById);
 
 module.exports = router;
